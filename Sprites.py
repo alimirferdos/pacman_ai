@@ -1,5 +1,5 @@
 import pygame
-white = (255, 255, 255)
+from pacman_ai.Globals import *
 
 
 class Wall(pygame.sprite.Sprite):
@@ -95,15 +95,15 @@ class Player(pygame.sprite.Sprite):
     def move(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                self.change_speed(-30, 0)
+                self.change_speed(-AGENT_MOVE, 0)
                 self.move_one_bool = True
             if event.key == pygame.K_RIGHT:
-                self.change_speed(30, 0)
+                self.change_speed(AGENT_MOVE, 0)
                 self.move_one_bool = True
             if event.key == pygame.K_UP:
-                self.change_speed(0, -30)
+                self.change_speed(0, -AGENT_MOVE)
                 self.move_one_bool = True
             if event.key == pygame.K_DOWN:
-                self.change_speed(0, 30)
+                self.change_speed(0, AGENT_MOVE)
                 self.move_one_bool = True
 
