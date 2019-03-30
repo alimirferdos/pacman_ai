@@ -1,5 +1,6 @@
 from pacman_ai.layout import Layout
 from pacman_ai.Sprites import *
+from pacman_ai.Search import dfs, bfs, ucs
 
 
 def load_layout():
@@ -29,8 +30,8 @@ class Game:
         pygame.init()
 
         # Create a screen
-        self.screen = pygame.display.set_mode([self.layout.width * TILE_POSITIONING,
-                                               self.layout.height * TILE_POSITIONING])
+        self.screen = pygame.display.set_mode([self.layout.height * TILE_POSITIONING,
+                                               self.layout.width * TILE_POSITIONING])
 
         # This is a list of 'sprites.' Each block in the program is
         # added to this list. The list is managed by a class called 'RenderPlain.'
@@ -56,33 +57,25 @@ class Game:
     def start_game(self):
         # Create the player paddle object
         pacman_position = self.layout.agentPositions
-        pacman = Player(pacman_position[0] * TILE_POSITIONING, pacman_position[1] * TILE_POSITIONING,
+        pacman = Player(pacman_position[1] * TILE_POSITIONING, pacman_position[0] * TILE_POSITIONING,
                         "images/Trollman.png")
         self.all_sprites_list.add(pacman)
         self.pacman_collide.add(pacman)
 
         self.draw_grid()
-        done = False
+        goal_pass = bfs(self.layout)
 
-        while done is False:
+        for m in goal_pass:
             # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-
-                pacman.move(event)
+            # for event in pygame.event.get():
+            #     pacman.move_keyboard(event)
+            # print(m)
+            pacman.move(m)
 
             # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
 
             # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
             pacman.update(self.wall_list)
-
-            # See if the pacman block has collided with anything.
-            blocks_hit_list = pygame.sprite.spritecollide(pacman, self.block_list, True)
-
-            # Check the list of collisions.
-            if len(blocks_hit_list) > 0:
-                score += len(blocks_hit_list)
 
             # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
 
@@ -96,7 +89,7 @@ class Game:
 
             pygame.display.flip()
 
-            self.clock.tick(10)
+            self.clock.tick(20)
 
     def draw_grid(self):
         for row in range(19):

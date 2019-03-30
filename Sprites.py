@@ -92,7 +92,21 @@ class Player(pygame.sprite.Sprite):
                 # Whoops, hit a wall. Go back to the old position
                 self.rect.top = old_y
 
-    def move(self, event):
+    def move(self, direction):
+        if direction == Directions.WEST:
+            self.change_speed(-AGENT_MOVE, 0)
+            self.move_one_bool = True
+        if direction == Directions.EAST:
+            self.change_speed(AGENT_MOVE, 0)
+            self.move_one_bool = True
+        if direction == Directions.NORTH:
+            self.change_speed(0, -AGENT_MOVE)
+            self.move_one_bool = True
+        if direction == Directions.SOUTH:
+            self.change_speed(0, AGENT_MOVE)
+            self.move_one_bool = True
+
+    def move_keyboard(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 self.change_speed(-AGENT_MOVE, 0)
