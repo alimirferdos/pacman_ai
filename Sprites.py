@@ -34,21 +34,17 @@ class Block(pygame.sprite.Sprite):
         pygame.draw.ellipse(self.image, color, [0, 0, width, height])
 
         # Fetch the rectangle object that has the dimensions of the image
-        # image.
-        # Update the position of this object by setting the values
-        # of rect.x and rect.y
+        # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
-
-    # This class represents the bar at the bottom that the player controls
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, filename):
+    def __init__(self, x, y, icon):
         # Call the parent's constructor
         pygame.sprite.Sprite.__init__(self)
 
         # Set height, width
-        self.image = pygame.image.load(filename).convert()
+        self.image = pygame.image.load(icon).convert()
 
         # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
@@ -94,30 +90,26 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, direction):
         if direction == Directions.WEST:
-            self.change_speed(-AGENT_MOVE, 0)
-            self.move_one_bool = True
+            self.take_one_step((-AGENT_MOVE, 0))
         if direction == Directions.EAST:
-            self.change_speed(AGENT_MOVE, 0)
-            self.move_one_bool = True
+            self.take_one_step((AGENT_MOVE, 0))
         if direction == Directions.NORTH:
-            self.change_speed(0, -AGENT_MOVE)
-            self.move_one_bool = True
+            self.take_one_step((0, -AGENT_MOVE))
         if direction == Directions.SOUTH:
-            self.change_speed(0, AGENT_MOVE)
-            self.move_one_bool = True
+            self.take_one_step((0, AGENT_MOVE))
 
     def move_keyboard(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                self.change_speed(-AGENT_MOVE, 0)
-                self.move_one_bool = True
+                self.take_one_step((-AGENT_MOVE, 0))
             if event.key == pygame.K_RIGHT:
-                self.change_speed(AGENT_MOVE, 0)
-                self.move_one_bool = True
+                self.take_one_step((AGENT_MOVE, 0))
             if event.key == pygame.K_UP:
-                self.change_speed(0, -AGENT_MOVE)
-                self.move_one_bool = True
+                self.take_one_step((0, -AGENT_MOVE))
             if event.key == pygame.K_DOWN:
-                self.change_speed(0, AGENT_MOVE)
-                self.move_one_bool = True
+                self.take_one_step((0, AGENT_MOVE))
+
+    def take_one_step(self, direction):
+        self.change_speed(*direction)
+        self.move_one_bool = True
 

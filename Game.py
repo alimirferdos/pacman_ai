@@ -1,11 +1,6 @@
-from pacman_ai.layout import Layout
+from pacman_ai.layout import load_layout
 from pacman_ai.Sprites import *
 from pacman_ai.Search import dfs, bfs, ucs
-
-
-def load_layout():
-    f = open("pacman_ai/layout.txt")
-    return Layout([line.strip() for line in f])
 
 
 def setup_room_one(all_sprites_list, layout):
@@ -62,34 +57,9 @@ class Game:
         self.all_sprites_list.add(pacman)
         self.pacman_collide.add(pacman)
 
-        self.draw_grid()
+        # self.draw_grid()
         goal_pass = ucs(self.layout)
-
-        for m in goal_pass:
-            # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
-            # for event in pygame.event.get():
-            #     pacman.move_keyboard(event)
-            # print(m)
-            pacman.move(m)
-
-            # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
-
-            # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
-            pacman.update(self.wall_list)
-
-            # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
-
-            # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
-            self.screen.fill(black)
-
-            self.wall_list.draw(self.screen)
-            self.all_sprites_list.draw(self.screen)
-
-            # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
-
-            pygame.display.flip()
-
-            self.clock.tick(20)
+        self.move_pacman(pacman, goal_pass)
 
     def draw_grid(self):
         for row in range(19):
@@ -113,3 +83,28 @@ class Game:
                         # Add the block to the list of objects
                         self.block_list.add(block)
                         self.all_sprites_list.add(block)
+
+    def move_pacman(self, pacman, goal_pass):
+        for m in goal_pass:
+            # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
+            # for event in pygame.event.get():
+            #     pacman.move_keyboard(event)
+            # print(m)
+            pacman.move(m)
+
+            # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
+            pacman.update(self.wall_list)
+
+            # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
+
+            # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+            self.screen.fill(black)
+
+            self.wall_list.draw(self.screen)
+            self.all_sprites_list.draw(self.screen)
+
+            # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
+
+            pygame.display.flip()
+
+            self.clock.tick(20)

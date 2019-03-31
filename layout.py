@@ -1,6 +1,3 @@
-from pacman_ai.Globals import Directions
-
-
 class Layout:
     """
   A Layout manages the static information about the game board.
@@ -58,3 +55,8 @@ class Layout:
         if y != 0 and not self.is_wall((x, y - 1)):
             neighbours.append(((x, y - 1), "West"))
         return neighbours
+
+
+def load_layout():
+    f = open("pacman_ai/layout.txt")
+    return Layout([line.strip() for line in f])
