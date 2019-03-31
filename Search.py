@@ -1,5 +1,6 @@
 from pacman_ai.Globals import Directions
 from collections import deque
+from pacman_ai.util import PriorityQueue
 
 
 def depth_first_search(layout):
@@ -8,7 +9,7 @@ def depth_first_search(layout):
     # create a Stack to keep track of nodes we are going to explore
     my_stack = []
 
-    done = set()  # to keep track or explored nodes
+    done = set()  # to keep track of explored nodes
 
     start_point = layout.agentPositions
 
@@ -35,7 +36,7 @@ def breadth_first_search(layout):
     # create a Queue to keep track of nodes we are going to explore
     my_queue = deque([])
 
-    done = set()  # to keep track or explored nodes
+    done = set()  # to keep track of explored nodes
 
     start_point = layout.agentPositions
 
@@ -56,34 +57,34 @@ def breadth_first_search(layout):
                     my_queue.append((k[0], new_pass + [directionTable[k[1]]]))
 
 
-def uniform_cost_search(problem):
+def uniform_cost_search(layout):
     directionTable = {'South': Directions.SOUTH, 'North': Directions.NORTH,
                       'West': Directions.WEST, 'East': Directions.EAST}
 
     # create a Queue to keep track of nodes we are going to explore
-    myQueue = util.PriorityQueue()
+    myQueue = PriorityQueue()
 
-    done = set()  # to keep track or explored nodes
+    done = set()  # to keep track of explored nodes
 
-    startPoint = problem.startingState()
+    start_point = layout.agentPositions
 
     # we will push in the queue tuples (coordinates, pass)
     # thus, we do not need additional dictionary for the passes (as we have in DFS)
-    myQueue.push((startPoint, []), 0)
+    myQueue.push((start_point, []), 0)
 
-    while not myQueue.isEmpty():
+    while not myQueue.is_empty():
         nextNode = myQueue.pop()
         coordinate = nextNode[0]
         newPass = nextNode[1]
 
-        if problem.isGoal(coordinate):
+        if layout.is_goal(coordinate):
             return newPass
         if coordinate not in done:
             done.add(coordinate)
-            for k in problem.successorStates(coordinate):
+            for k in layout.get_neighbours(coordinate):
                 if k[0] not in done:
                     # we need to calculate a new priority
-                    cost = problem.actionsCost(newPass + [directionTable[k[1]]])
+                    cost = len(newPass) + 1
                     myQueue.push((k[0], newPass + [directionTable[k[1]]]), cost)
 
 

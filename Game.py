@@ -63,7 +63,7 @@ class Game:
         self.pacman_collide.add(pacman)
 
         self.draw_grid()
-        goal_pass = bfs(self.layout)
+        goal_pass = ucs(self.layout)
 
         for m in goal_pass:
             # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
